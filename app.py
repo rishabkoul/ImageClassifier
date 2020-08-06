@@ -25,29 +25,32 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 # Model saved with Keras model.save()
-MODEL_PATH = 'model_resnet50.h5'
+MODEL_PATH = 'my_model.h5'
 
 # Load your trained model
 model = load_model(MODEL_PATH)
 
 
 def model_predict(img_path, model):
-    img = image.load_img(img_path, target_size=(224, 224))
+    img = image.load_img(img_path, target_size=(64, 64))
 
     # Preprocessing the image
     x = image.img_to_array(img)
     # x = np.true_divide(x, 255)
     # Scaling
-    x = x/255
+    # x = x/255
     x = np.expand_dims(x, axis=0)
 
     # Be careful how your trained model deals with the input
     # otherwise, it won't make correct prediction!
-    x = preprocess_input(x)
+    # x = preprocess_input(x)
 
     preds = model.predict(x)
 
-    return preds
+    if preds[0][0] == 1:
+        return 'dog'
+    else:
+        return 'cat'
 
 
 @app.route('/', methods=['GET'])
@@ -70,9 +73,7 @@ def upload():
 
         # Make prediction
         preds = model_predict(file_path, model)
-        result1 = preds[0][0]
-        result2 = preds[0][1]
-        return 'Clean : %'+str(result1*100)+' Messy : %'+str(result2*100)
+        return preds
     return None
 
 
