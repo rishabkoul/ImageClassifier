@@ -72,7 +72,7 @@ def upload():
         preds = model_predict(file_path, model)
         result1 = preds[0][0]
         result2 = preds[0][1]
-        return 'Clean : %'+str(result1)+' Messy : %'+str(result2)
+        return 'Clean : %'+str(result1*100)+' Messy : %'+str(result2*100)
     return None
 
 
