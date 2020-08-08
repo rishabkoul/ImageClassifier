@@ -12,9 +12,10 @@ import re
 import numpy as np
 
 # Keras
-from tensorflow.keras.applications.imagenet_utils import preprocess_input, decode_predictions
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import preprocess_input
+import numpy as np
 
 # Flask utils
 from flask import Flask, redirect, url_for, request, render_template
@@ -25,14 +26,14 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 # Model saved with Keras model.save()
-MODEL_PATH = 'my_model.h5'
+MODEL_PATH = 'model_vgg19.h5'
 
 # Load your trained model
 model = load_model(MODEL_PATH)
 
 
 def model_predict(img_path, model):
-    img = image.load_img(img_path, target_size=(64, 64))
+    img = image.load_img(img_path, target_size=(224, 224))
 
     # Preprocessing the image
     x = image.img_to_array(img)
@@ -43,14 +44,11 @@ def model_predict(img_path, model):
 
     # Be careful how your trained model deals with the input
     # otherwise, it won't make correct prediction!
-    # x = preprocess_input(x)
+    x = preprocess_input(x)
 
     preds = model.predict(x)
 
-    if preds[0][0] == 1:
-        return 'dog'
-    else:
-        return 'cat'
+    return "painting : %"+str(preds[0][0]*100)+" photo : %"+str(preds[0][1]*100)
 
 
 @app.route('/', methods=['GET'])
