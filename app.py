@@ -48,7 +48,7 @@ def model_predict(img_path, model):
 
     preds = model.predict(x)
 
-    return "painting : %"+str(preds[0][0]*100)+" photo : %"+str(preds[0][1]*100)
+    return "Clean : %"+str(preds[0][0]*100)+" Messy : %"+str(preds[0][1]*100)
 
 
 @app.route('/', methods=['GET'])
