@@ -34,6 +34,8 @@ model = load_model(MODEL_PATH)
 
 def model_predict(img_path, model):
     img = image.load_img(img_path, target_size=(224, 224))
+    vechicle = ['bike', 'boat', 'bus', 'car', 'cycle',
+                'helicopter', 'plane', 'scooty', 'truck']
 
     # Preprocessing the image
     x = image.img_to_array(img)
@@ -48,7 +50,14 @@ def model_predict(img_path, model):
 
     preds = model.predict(x)
 
-    return "Clean : %"+str(preds[0][0]*100)+" Messy : %"+str(preds[0][1]*100)
+    top3 = sorted(range(len(preds[0])), key=lambda i: preds[0][i])[-3:]
+    top3.reverse()
+
+    sentence = ""
+    for i in top3:
+        sentence = sentence+str(vechicle[i])+": %"+str(preds[0][i]*100)+"\n"
+
+    return sentence
 
 
 @app.route('/', methods=['GET'])
