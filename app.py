@@ -35,7 +35,7 @@ model = load_model(MODEL_PATH)
 def model_predict(img_path, model):
     img = image.load_img(img_path, target_size=(224, 224))
     vechicle = ['bike', 'boat', 'bus', 'car', 'cycle',
-                'helicopter', 'plane', 'scooty', 'truck']
+                'helicopter', 'plane', 'scooty', 'train', 'truck']
 
     # Preprocessing the image
     x = image.img_to_array(img)
